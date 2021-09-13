@@ -36,6 +36,7 @@ switcher.on('connected', () => {
 
 switcher.on('disconnected', () => {
 	console.log("Lost connection!");
+	off();
 	red();
 });
 
@@ -51,7 +52,9 @@ switcher.on('stateChanged', (state) => {
 
 	// If faded to black, lights are always off
 	if(state.video.ME[0].fadeToBlack && state.video.ME[0].fadeToBlack.isFullyBlack) {
+		//console.log("FTB");
 		off();
+		return;
 	// This camera is either in program OR preview, and there is an ongoing transition.
 	} else { // Camera is not in preview or program
 		off();
@@ -59,11 +62,14 @@ switcher.on('stateChanged', (state) => {
 
 	if(program == config.mainID) {
 		off();
+		//console.log("Main LED");
 		mainled.digitalWrite(1);	
 	} else if(program == config.balconyID) {
 		off();
+		//console.log("Balcony LED");
 		balconyled.digitalWrite(1);
 	} else {
+		//console.log("No Camera");
 		off();
 	}
 });
